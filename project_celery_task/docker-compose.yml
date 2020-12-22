@@ -1,0 +1,39 @@
+version: "3.0"
+services:
+  web:
+    image: "celery:latest"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - "./:/app"
+    networks:
+      - webnet
+    ports:
+      - 8000:8000
+    command: pipenv run python manage.py runserver 0.0.0.0:8000
+    # env_file:
+    #   - .env
+
+  celery:
+    image: "celery:latest"
+    volumes:
+      - "./:/app"
+    networks:
+      - webnet
+    command: pipenv run celery -A tasks worker -l info -n project_celery
+    depends_on:
+      - web
+  rabbit:
+    image: rabbitmq:3-management
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=password
+    ports:
+      - "5672:5672" # We forward this port because it's useful for debugging # Here, we can access RabbitMQ management plugin
+    networks:
+      - webnet
+
+  # Use for worker
+networks:
+  webnet: null
