@@ -1,8 +1,8 @@
 import "./App.css";
-import { Form, Input, InputNumber, Button } from "antd";
+import { Form, Input, Button } from "antd";
 import * as PusherPushNotifications from "@pusher/push-notifications-web";
 // importScripts("https://js.pusher.com/beams/service-worker.js");
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 
 function App() {
@@ -21,9 +21,7 @@ function App() {
   const beamsClient = new PusherPushNotifications.Client({
     instanceId: "d1b4fec5-3e57-4347-844d-b94e287ae2d2",
   });
-  const headers = {
-    "Content-Type": "application/json",
-  };
+
   const onSubmit = (event) => {
     // event.preventDefault();
 
